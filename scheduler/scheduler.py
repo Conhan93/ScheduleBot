@@ -133,27 +133,11 @@ class ScheduleBot:
 
         return str.join('\n\n', results)
 
-    def _get_soup(self):
-        page = urlopen(self.url)
-        html = page.read().decode("utf-8")
-        return BeautifulSoup(html, "html.parser")
-
     def _get_text_lines(self, soup):
         textlines = []
         lines = soup.find_all(self.relevant_rows)
         textlines = [line.get_text() for line in lines]
         return [str(line).strip() for line in textlines]
-
-    def getSchedule(self):
-        
-        soup = self._get_soup()
-
-        
-        textlines = self._get_text_lines(soup)
-
-        output = self._format_output(textlines)
-        
-        return output
     
     def get_schedule_for_week(self, week, classname):
         navigator = SelNavigator()
