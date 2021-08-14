@@ -16,7 +16,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 class SelNavigator:
     def __init__(self):
-        self.url = 'https://cloud.timeedit.net/nackademin/web/1/ri1Q58.html'
+        self.url = os.getenv('TIMEEDIT_URL')
     
     def _enter_classname(self, classname):
          #find search box
