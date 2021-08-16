@@ -1,4 +1,4 @@
-import selnavigator
+from selnavigator import SelNavigator
 from bs4 import BeautifulSoup
 
 class ScheduleBot:
