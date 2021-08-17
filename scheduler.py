@@ -6,10 +6,10 @@ from bs4 import BeautifulSoup
 
 class ScheduleBot(discord.Client):
    
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
          self.classname = None
          self.week = None
-         super.__init__()
+         super.__init__(*args, **kwargs)
 
     async def on_ready(self):
         print('We have logged in as {0.user}'.format(self))
