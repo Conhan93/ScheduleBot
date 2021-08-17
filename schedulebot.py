@@ -4,11 +4,12 @@ from discord.ext import commands
 import os
 
 
-client = discord.Client()
+#client = discord.Client()
 
 scheduleclient = ScheduleBot()
+scheduleclient.run(os.getenv('DISCORD_TOKEN'))
 
-
+"""
 @client.event
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
@@ -21,3 +22,4 @@ async def on_message(message):
     await scheduleclient.HandleMessage(message) # go to schedule
 
 client.run(os.getenv('DISCORD_TOKEN'))
+"""
