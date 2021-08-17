@@ -9,6 +9,7 @@ class ScheduleBot(discord.Client):
     def __init__(self):
          self.classname = None
          self.week = None
+         super.__init__()
 
     async def on_ready(self):
         print('We have logged in as {0.user}'.format(self))
@@ -18,7 +19,7 @@ class ScheduleBot(discord.Client):
             return
 
         await self.HandleMessage(message) # go to schedule
-        
+
     def relevant_rows(self,tag):
         return tag.has_attr('class') and tag.has_attr('data-id') and tag.has_attr('tabindex') and tag.has_attr('onclick')
     
