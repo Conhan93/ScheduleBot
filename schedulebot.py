@@ -3,7 +3,6 @@ import discord
 from discord.ext import commands
 
 from selnavigator import SelNavigator
-from bs4 import BeautifulSoup
 
 class ScheduleBot(discord.Client):
    
@@ -16,57 +15,27 @@ class ScheduleBot(discord.Client):
         print('We have logged in as {0.user}'.format(self))
 
     async def on_message(self, message):
+        """ triggers on message from discord """
+
         if message.author == self.user:
             return
-
-        await self.HandleMessage(message) # go to schedule
-    """
-
-    def relevant_rows(self,tag):
-        return tag.has_attr('class') and tag.has_attr('data-id') and tag.has_attr('tabindex') and tag.has_attr('onclick')
-    
-    def _format_output(self, textlines):
-        results = []
-        index = 0
-        while index + 1 < len(textlines):
-            results.append(textlines[index].replace('\n',' ') + '\n\t' + textlines[index+1].replace('\n', ' '))
-            index += 2
-
-        return str.join('\n\n', results)
-
-    def _get_text_lines(self, soup):
-        textlines = []
-        lines = soup.find_all(self.relevant_rows)
-        textlines = [line.get_text() for line in lines]
-        return [str(line).strip() for line in textlines]
-        """
+        
+        await self.HandleMessage(message)
     
     def get_schedule_for_week(self, week, classname):
+        """" Gets class schedule for given week """
         navigator = SelNavigator()
         extractor = Extractor()
         page = navigator.get_page_at(week, classname)
-        """
 
-        soup = BeautifulSoup(page, "html.parser")
-
-        textlines = self._get_text_lines(soup)
-
-        output = self._format_output(textlines)
-        """
         
         return extractor.extract_schedule(page)
     def get_schedule_current(self, classname):
+        """" Gets class schedule for current week """
         navigator = SelNavigator()
         extractor = Extractor()
         page = navigator.get_page(classname)
-        """
 
-        soup = BeautifulSoup(page, "html.parser")
-
-        textlines = self._get_text_lines(soup)
-
-        output = self._format_output(textlines)
-        """
         
         return extractor.extract_schedule(page)
     def _get_args(self, args):
@@ -102,13 +71,12 @@ class ScheduleBot(discord.Client):
                     response = self.get_schedule_for_week(self.week, self.classname)
         
                 if len(response) == 0:
-                    await message.channel.send('kunde inte hitta ett schema')
+                    await message.channel.send('kunde inte hitta ett schema för den veckan')
                     
                 else:
                     await message.channel.send(response)
-                    print(response)
                 
-
+            # print exception to log
             except Exception as error:
                 print(f'wooops : {repr(error)}')
             
