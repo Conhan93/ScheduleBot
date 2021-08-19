@@ -1,4 +1,4 @@
-from scheduler import ScheduleBot
+from schedulebot import ScheduleBot
 import discord
 from discord.ext import commands
 import os
