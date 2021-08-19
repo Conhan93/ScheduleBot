@@ -1,11 +1,9 @@
-
-
 from bs4 import BeautifulSoup
 
 class Extractor:
+    """ extracts text and formats schedule text from page """
 
-
-    def relevant_rows(self,tag):
+    def schedule_rows(self,tag):
         return tag.has_attr('class') and tag.has_attr('data-id') and tag.has_attr('tabindex') and tag.has_attr('onclick')
     
     def _format_output(self, textlines):
@@ -19,7 +17,7 @@ class Extractor:
 
     def _get_text_lines(self, soup):
         textlines = []
-        lines = soup.find_all(self.relevant_rows)
+        lines = soup.find_all(self.schedule_rows)
         textlines = [line.get_text() for line in lines]
         return [str(line).strip() for line in textlines]
 

@@ -9,6 +9,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 
 class SelNavigator:
+    """ Navigates the TimeEdit page """
+
     def __init__(self):
         self.url = os.getenv('TIMEEDIT_URL')
     
@@ -62,6 +64,7 @@ class SelNavigator:
         return firefox_driver
 
     def get_page(self, classname):
+        """ Gets the schedule page for the current week """
         # setup browser
         self.driver = self._load_driver()
         #load page
@@ -80,6 +83,7 @@ class SelNavigator:
         return page
 
     def get_page_at(self, week_sel, classname):
+        """ Gets the schedule page for the given week """
         # setup browser
         self.driver = self._load_driver()
 
