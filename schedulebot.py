@@ -1,3 +1,4 @@
+import asyncio
 import threading
 from extractor import Extractor
 import discord
@@ -17,17 +18,25 @@ class ScheduleBot(discord.Client):
     async def on_ready(self):
         print('We have logged in as {0.user}'.format(self))
 
-        self.timer = threading.Thread(None, self.update_schedule_monday) 
-        self.timer.start()
+        #self.timer = threading.Thread(None, self.update_schedule_monday) 
+        #self.timer.start()
        
     
-    def update_schedule_monday(self):
+    async def update_schedule_monday(self):
+        count = 0
+
         while True:
-            if datetime.datetime.now().hour == 17:
+            if count > 4:
+                break
+            if datetime.datetime.now().hour == 18:
                 print("clk is")
                 if datetime.datetime.today().weekday() == 6:
                     print("it's sunday")
-            sleep(5)
+                    channel = self.get_channel(877212291056169050)
+                    await channel.send(self.get_schedule_current("iot20"))
+            #sleep(60)
+            await asyncio.sleep(60)
+            count += 1
                 
 
     async def on_message(self, message):
