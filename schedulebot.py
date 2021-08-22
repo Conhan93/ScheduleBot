@@ -3,6 +3,7 @@ from extractor import Extractor
 import discord
 import datetime
 import threading
+from time import sleep
 
 from selnavigator import SelNavigator
 
@@ -16,17 +17,18 @@ class ScheduleBot(discord.Client):
     async def on_ready(self):
         print('We have logged in as {0.user}'.format(self))
 
-        self.timer = threading.Timer(60.0 * 2, self.update_schedule_monday) 
+        self.timer = threading.Thread(None, self.update_schedule_monday) 
         self.timer.start()
        
     
     def update_schedule_monday(self):
-        
-        if datetime.datetime.now().hour == 17:
-            print("clk is")
-            if datetime.datetime.today().weekday() == 6:
-                print("it's sunday")
-            
+        while True:
+            if datetime.datetime.now().hour == 17:
+                print("clk is")
+                if datetime.datetime.today().weekday() == 6:
+                    print("it's sunday")
+            sleep(5)
+                
 
     async def on_message(self, message):
         """ triggers on message from discord """
