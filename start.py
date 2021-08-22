@@ -23,6 +23,6 @@ async def update_schedule_monday():
             await asyncio.sleep(60)
             count += 1
 
-asyncio.get_event_loop().create_task(scheduleclient.update_schedule_monday)
+asyncio.get_event_loop().create_task(update_schedule_monday)
 
 scheduleclient.run(os.getenv('DISCORD_TOKEN'))
