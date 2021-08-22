@@ -18,9 +18,6 @@ class ScheduleBot(discord.Client):
     async def on_ready(self):
         print('We have logged in as {0.user}'.format(self))
 
-        #self.timer = threading.Thread(None, self.update_schedule_monday) 
-        #self.timer.start()
-
     async def on_message(self, message):
         """ triggers on message from discord """
 
