@@ -1,7 +1,8 @@
+import threading
 from extractor import Extractor
 import discord
-from discord.ext import tasks
 import datetime
+import threading
 
 from selnavigator import SelNavigator
 
@@ -12,16 +13,16 @@ class ScheduleBot(discord.Client):
          self.week = None
          super().__init__(*args, **kwargs)
 
-         
-
     async def on_ready(self):
         print('We have logged in as {0.user}'.format(self))
-        self.is_clk_6.start()
 
-    @tasks.Loop(hours=1)
-    async def is_clk_6(self):
+        self.timer = threading.Timer(60.0 * 2, self.update_schedule_monday) 
+        self.timer.start()
+       
+    
+    def update_schedule_monday(self):
         
-        if datetime.datetime.now().hour == 16:
+        if datetime.datetime.now().hour == 17:
             print("clk is")
             if datetime.datetime.today().weekday() == 6:
                 print("it's sunday")
