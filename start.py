@@ -15,17 +15,20 @@ async def update_schedule_monday():
         await scheduleclient.wait_until_ready()
 
     print("looping")
+    time.today().
     
     if time.now(pytz.timezone('Europe/Stockholm')).hour == 8 and time.today().weekday() == 0:
 
-        channel = scheduleclient.get_channel(os.getenv('CHANNEL_IOT20'))
-        msg = scheduleclient.get_schedule_current("iot20")
+        channel = scheduleclient.get_channel(int(os.getenv('CHANNEL_IOT20')))
+        msg = scheduleclient.get_schedule_for_week(str(time.today().isocalendar()[1]), 'iot20')
 
         if len(msg) == 0:
             msg = "kunde inte hitta ett schema för den här veckan"
-
+        else:
+            await channel.send(msg)
+            
         print("message is : " + msg)
-        await channel.send(msg)
+        
     
     print("loop done")
             
