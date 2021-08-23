@@ -14,7 +14,7 @@ async def update_schedule_monday():
         return
 
     print("looping")
-    if datetime.datetime.now().hour == 6 and datetime.datetime.today().weekday() == 0:
+    if datetime.datetime.now().hour == 7 and datetime.datetime.today().weekday() == 0:
 
         channel = scheduleclient.get_channel(os.getenv('CHANNEL_IOT20'))
         msg = scheduleclient.get_schedule_current("iot20")
