@@ -1,8 +1,9 @@
-import asyncio
 from discord.ext import tasks
 from schedulebot import ScheduleBot
-import datetime
 import os
+
+from datetime import datetime as time
+import pytz
 
 
 
@@ -11,10 +12,11 @@ scheduleclient = ScheduleBot()
 @tasks.loop(hours=1)
 async def update_schedule_monday():
     if not scheduleclient.is_ready():
-        return
+        scheduleclient.wait_until_ready()
 
     print("looping")
-    if datetime.datetime.now().hour == 7 and datetime.datetime.today().weekday() == 0:
+    
+    if time.now(pytz.timezone('Europe/Stockholm')).hour == 8 and time.today().weekday() == 0:
 
         channel = scheduleclient.get_channel(os.getenv('CHANNEL_IOT20'))
         msg = scheduleclient.get_schedule_current("iot20")
