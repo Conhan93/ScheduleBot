@@ -12,7 +12,7 @@ scheduleclient = ScheduleBot()
 @tasks.loop(hours=1)
 async def update_schedule_monday():
     if not scheduleclient.is_ready():
-        scheduleclient.wait_until_ready()
+        await scheduleclient.wait_until_ready()
 
     print("looping")
     
