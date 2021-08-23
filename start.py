@@ -15,7 +15,6 @@ async def update_schedule_monday():
         await scheduleclient.wait_until_ready()
 
     print("looping")
-    time.today().
     
     if time.now(pytz.timezone('Europe/Stockholm')).hour == 8 and time.today().weekday() == 0:
 
@@ -26,7 +25,7 @@ async def update_schedule_monday():
             msg = "kunde inte hitta ett schema för den här veckan"
         else:
             await channel.send(msg)
-            
+
         print("message is : " + msg)
         
     
