@@ -40,7 +40,7 @@ class ScheduleBot(discord.Client):
 
         print("looping")
         
-        if time.now(pytz.timezone('Europe/Stockholm')).hour == 20 and time.today().weekday() == 1:
+        if time.now(pytz.timezone('Europe/Stockholm')).hour == 6 and time.today().weekday() == 0:
 
             channel = self.get_channel(os.getenv(int('CHANNEL_IOT20')))
             msg_iot20 = self.get_schedule_for_week(str(time.today().isocalendar()[1]), 'iot20')
