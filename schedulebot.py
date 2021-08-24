@@ -7,6 +7,10 @@ import threading
 from time import sleep
 
 from selnavigator import SelNavigator
+from discord.ext import tasks
+from datetime import datetime as time
+import pytz
+import os
 
 class ScheduleBot(discord.Client):
    
@@ -18,6 +22,9 @@ class ScheduleBot(discord.Client):
     async def on_ready(self):
         print('We have logged in as {0.user}'.format(self))
 
+        self.loop.create_task(self.update_schedule_monday())
+        #self.update_schedule_monday().start()
+
     async def on_message(self, message):
         """ triggers on message from discord """
 
@@ -25,6 +32,37 @@ class ScheduleBot(discord.Client):
             return
 
         await self.HandleMessage(message)
+        
+    @tasks.loop(hours=1)
+    async def update_schedule_monday(self):
+        if not self.is_ready():
+            await self.wait_until_ready()
+
+        print("looping")
+        
+        if time.now(pytz.timezone('Europe/Stockholm')).hour == 20 and time.today().weekday() == 1:
+
+            channel = self.get_channel(os.getenv(int('CHANNEL_IOT20')))
+            msg_iot20 = self.get_schedule_for_week(str(time.today().isocalendar()[1]), 'iot20')
+
+            if len(msg_iot20) == 0:
+                msg_iot20 = "kunde inte hitta ett schema för den här veckan"
+            else:
+                await channel.send(msg_iot20)
+
+            channel = self.get_channel(os.getenv(int('CHANNEL_IOT')))
+            msg_iot = self.get_schedule_for_week(str(time.today().isocalendar()[1]), 'iot20')
+
+            if len(msg_iot) == 0:
+                msg_iot = "kunde inte hitta ett schema för den här veckan"
+            else:
+                await channel.send(msg_iot)
+                await channel.send(msg_iot20)
+
+            print("message is : " + msg_iot)
+            
+        
+        print("loop done")
     
     def get_schedule_for_week(self, week, classname):
         """" Gets class schedule for given week """
