@@ -32,6 +32,14 @@ class ScheduleBot(discord.Client):
             return
 
         await self.HandleMessage(message)
+
+    async def send_message_to_channel(self, channel_id, msg):
+        try:
+            if len(msg) > 0:
+                channel = self.get_channel(int(channel_id))
+                await channel.send(msg)
+        except Exception as error:
+            print(repr(error))
         
     @tasks.loop(hours=1)
     async def update_schedule_monday(self):
@@ -41,26 +49,14 @@ class ScheduleBot(discord.Client):
         print("looping")
         
         if time.now(pytz.timezone('Europe/Stockholm')).hour == 6 and time.today().weekday() == 0:
-
-            channel = self.get_channel(os.getenv(int('CHANNEL_IOT20')))
+            
             msg_iot20 = self.get_schedule_for_week(str(time.today().isocalendar()[1]), 'iot20')
-
-            if len(msg_iot20) == 0:
-                msg_iot20 = "kunde inte hitta ett schema för den här veckan"
-            else:
-                await channel.send(msg_iot20)
-
-            channel = self.get_channel(os.getenv(int('CHANNEL_IOT')))
             msg_iot = self.get_schedule_for_week(str(time.today().isocalendar()[1]), 'iot20')
 
-            if len(msg_iot) == 0:
-                msg_iot = "kunde inte hitta ett schema för den här veckan"
-            else:
-                await channel.send(msg_iot)
-                await channel.send(msg_iot20)
+            await self.send_message_to_channel(os.getenv(int('CHANNEL_IOT20')), msg_iot20)
 
-            print("message is : " + msg_iot)
-            
+            await self.send_message_to_channel(os.getenv(int('CHANNEL_IOT')), msg_iot)
+            await self.send_message_to_channel(os.getenv(int('CHANNEL_IOT')), msg_iot20)          
         
         print("loop done")
     
