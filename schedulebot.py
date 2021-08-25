@@ -30,8 +30,33 @@ class ScheduleBot(discord.Client):
 
         if message.author == self.user:
             return
+        
+        if message.content.startswith('$schema'):
 
-        await self.HandleMessage(message)
+            if 'help' in message.content.lower():
+                await message.channel.send('skriv "$schema klassnamn(ex iot20) vecka(34)" för schema')
+                return
+
+            try:
+                self._get_args(message.content)
+                
+                if self.classname and not self.week:
+                    response = self.get_schedule_current(self.classname)
+                elif self.classname and self.week:
+                    response = self.get_schedule_for_week(self.week, self.classname)
+        
+                if len(response) == 0:
+                    await message.channel.send('kunde inte hitta ett schema för den veckan')
+                    
+                else:
+                    await message.channel.send(response)
+                
+            # print exception to log
+            except Exception as error:
+                print(f'wooops : {repr(error)}')
+            
+            self._reset_variables()
+
 
     async def send_message_to_channel(self, channel_id, msg):
         try:
@@ -92,30 +117,3 @@ class ScheduleBot(discord.Client):
     def _reset_variables(self):
         self.classname = None
         self.week = None
-
-    async def HandleMessage(self, message):
-        if message.content.startswith('$schema'):
-
-            if 'help' in message.content.lower():
-                await message.channel.send('skriv "$schema klassnamn(ex iot20) vecka(34)" för schema')
-                return
-
-            try:
-                self._get_args(message.content)
-                
-                if self.classname and not self.week:
-                    response = self.get_schedule_current(self.classname)
-                elif self.classname and self.week:
-                    response = self.get_schedule_for_week(self.week, self.classname)
-        
-                if len(response) == 0:
-                    await message.channel.send('kunde inte hitta ett schema för den veckan')
-                    
-                else:
-                    await message.channel.send(response)
-                
-            # print exception to log
-            except Exception as error:
-                print(f'wooops : {repr(error)}')
-            
-            self._reset_variables()
