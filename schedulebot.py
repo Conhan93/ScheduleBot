@@ -22,7 +22,6 @@ class ScheduleBot(discord.Client):
         print('We have logged in as {0.user}'.format(self))
 
         self.loop.create_task(self.update_schedule_monday())
-        #self.update_schedule_monday().start()
 
     async def on_message(self, message):
         """ triggers on message from discord """
@@ -75,11 +74,11 @@ class ScheduleBot(discord.Client):
         if time.now(pytz.timezone('Europe/Stockholm')).hour == 6 and time.today().weekday() == 0:
             
             msg_iot20 = self.get_schedule_for_week(str(time.today().isocalendar()[1]), 'iot20')
-            msg_iot = self.get_schedule_for_week(str(time.today().isocalendar()[1]), 'iot20')
+            msg_iot21 = self.get_schedule_for_week(str(time.today().isocalendar()[1]), 'iot21')
 
             await self.send_message_to_channel(os.getenv(int('CHANNEL_IOT20')), msg_iot20)
 
-            await self.send_message_to_channel(os.getenv(int('CHANNEL_IOT')), msg_iot)
+            await self.send_message_to_channel(os.getenv(int('CHANNEL_IOT')), msg_iot21)
             await self.send_message_to_channel(os.getenv(int('CHANNEL_IOT')), msg_iot20)          
         
         print("loop done")
