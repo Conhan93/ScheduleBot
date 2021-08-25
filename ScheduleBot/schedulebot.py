@@ -3,8 +3,8 @@ import os
 import discord
 from discord.ext import tasks
 
-from selnavigator import SelNavigator
-from pageparser import PageParser
+from .selnavigator import SelNavigator
+from .pageparser import PageParser
 
 
 from datetime import datetime as time

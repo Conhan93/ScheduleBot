@@ -1,10 +1,6 @@
-from discord.ext import tasks
-from schedulebot import ScheduleBot
 import os
 
-from datetime import datetime as time
-import pytz
-
+from ScheduleBot.schedulebot import ScheduleBot
 
 
 scheduleclient = ScheduleBot()
