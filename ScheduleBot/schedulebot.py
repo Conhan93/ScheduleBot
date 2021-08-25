@@ -10,6 +10,8 @@ from .pageparser import PageParser
 from datetime import datetime as time
 import pytz
 
+import asyncio
+
 
 class ScheduleBot(discord.Client):
    
@@ -64,24 +66,25 @@ class ScheduleBot(discord.Client):
         except Exception as error:
             print(repr(error))
         
-    @tasks.loop(hours=1)
     async def update_schedule_monday(self):
         if not self.is_ready():
             await self.wait_until_ready()
 
-        print("looping")
-        
-        if time.now(pytz.timezone('Europe/Stockholm')).hour == 6 and time.today().weekday() == 0:
+        while True:
+            print("looping")
             
-            msg_iot20 = self.get_schedule_for_week(str(time.today().isocalendar()[1]), 'iot20')
-            msg_iot21 = self.get_schedule_for_week(str(time.today().isocalendar()[1]), 'iot21')
+            if time.now(pytz.timezone('Europe/Stockholm')).hour == 6 and time.today().weekday() == 0:
+                
+                msg_iot20 = self.get_schedule_for_week(str(time.today().isocalendar()[1]), 'iot20')
+                msg_iot21 = self.get_schedule_for_week(str(time.today().isocalendar()[1]), 'iot21')
 
-            await self.send_message_to_channel(os.getenv(int('CHANNEL_IOT20')), msg_iot20)
+                await self.send_message_to_channel(os.getenv(int('CHANNEL_IOT20')), msg_iot20)
 
-            await self.send_message_to_channel(os.getenv(int('CHANNEL_IOT')), msg_iot21)
-            await self.send_message_to_channel(os.getenv(int('CHANNEL_IOT')), msg_iot20)          
-        
-        print("loop done")
+                await self.send_message_to_channel(os.getenv(int('CHANNEL_IOT')), msg_iot21)
+                await self.send_message_to_channel(os.getenv(int('CHANNEL_IOT')), msg_iot20)          
+            
+            print("loop done")
+            await asyncio.sleep(60*60)
     
     def get_schedule_for_week(self, week, classname):
         """" Gets class schedule for given week """
