@@ -21,11 +21,11 @@ class SelNavigator:
         # enter search text and click on search button
         search_field.send_keys(classname)
         self.driver.find_element_by_class_name('ffsearchbutton').click()
-        #WebDriverWait(self.driver, 2) # wait 2 sec
+
         search_field.send_keys(Keys.ENTER) # hit enter - needed for some reason
 
     def _select_search_result(self):
-        # wait 2 sec and click on first search result
+        """ Selects the first search result on the page """
 
         try:
             element = WebDriverWait(self.driver, 5).until(
@@ -39,11 +39,12 @@ class SelNavigator:
                 return 0
         
         # click on "visa schema"
-        #WebDriverWait(self.driver, 2)
         self.driver.find_element_by_id('objectbasketgo').click()
 
         return 1
+
     def _load_driver(self):
+
         options = webdriver.FirefoxOptions()
 	
         # enable trace level for debugging 
@@ -74,12 +75,13 @@ class SelNavigator:
         if self._select_search_result() == 0:
             return ''
 
-        #WebDriverWait(self.driver, 2)
         week = self.driver.find_element_by_class_name('flexFixed')
         html = week.get_attribute('innerHTML')
 
         page = self.driver.page_source
+
         self.driver.close()
+
         return page
 
     def get_page_at(self, week_sel, classname):
@@ -95,11 +97,9 @@ class SelNavigator:
         if self._select_search_result() == None:
             return ''
         
-        #WebDriverWait(self.driver, 2)
         week = self.driver.find_element_by_class_name('flexFixed')
         html = week.get_attribute('innerHTML')
 
-        #WebDriverWait(self.driver, 2)
         count = 0
         while 'v '+ week_sel not in html and count < 30:
             self.driver.find_element_by_class_name('btrRight').click()
@@ -109,4 +109,5 @@ class SelNavigator:
 
         page = self.driver.page_source
         self.driver.close()
+        
         return page
