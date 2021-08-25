@@ -1,16 +1,15 @@
-import asyncio
-import threading
-from extractor import Extractor
+import os
+
 import discord
-import datetime
-import threading
-from time import sleep
+from discord.ext import tasks
 
 from selnavigator import SelNavigator
-from discord.ext import tasks
+from pageparser import PageParser
+
+
 from datetime import datetime as time
 import pytz
-import os
+
 
 class ScheduleBot(discord.Client):
    
@@ -88,19 +87,19 @@ class ScheduleBot(discord.Client):
     def get_schedule_for_week(self, week, classname):
         """" Gets class schedule for given week """
         navigator = SelNavigator()
-        extractor = Extractor()
+        parser = PageParser()
         page = navigator.get_page_at(week, classname)
 
         
-        return extractor.extract_schedule(page)
+        return parser.extract_schedule(page)
     def get_schedule_current(self, classname):
         """" Gets class schedule for current week """
         navigator = SelNavigator()
-        extractor = Extractor()
+        parser = PageParser()
         page = navigator.get_page(classname)
 
         
-        return extractor.extract_schedule(page)
+        return parser.extract_schedule(page)
     def _get_args(self, args):
         argsl = args.split()
 

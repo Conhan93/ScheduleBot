@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 
-class Extractor:
+class PageParser:
     """ extracts text and formats schedule text from page """
 
     def schedule_rows(self,tag):
