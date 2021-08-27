@@ -17,9 +17,13 @@ import asyncio
 class ScheduleBot(discord.Client):
    
     def __init__(self, *args, **kwargs):
-         self.classname = None
-         self.week = None
-         super().__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
+
+        self.settings = Settings()
+
+        self.classname = None
+        self.week = None
+         
 
     async def on_ready(self):
         print('We have logged in as {0.user}'.format(self))
@@ -74,18 +78,18 @@ class ScheduleBot(discord.Client):
         while True:
             print("looping")
             
-            if time.now(pytz.timezone('Europe/Stockholm')).hour == 6 and time.today().weekday() == 0:
+            if time.now(pytz.timezone('Europe/Stockholm')).hour == 6 and time.today().weekday() == self.settings.weekday['mon']:
                 
                 msg_iot20 = self.get_schedule_for_week(str(time.today().isocalendar()[1]), 'iot20')
                 msg_iot21 = self.get_schedule_for_week(str(time.today().isocalendar()[1]), 'iot21')
 
-                await self.send_message_to_channel(os.getenv(int('CHANNEL_IOT20')), msg_iot20)
+                await self.send_message_to_channel(self.settings.channels['iot20'], msg_iot20)
 
-                await self.send_message_to_channel(os.getenv(int('CHANNEL_IOT')), msg_iot21)
-                await self.send_message_to_channel(os.getenv(int('CHANNEL_IOT')), msg_iot20)          
+                await self.send_message_to_channel(self.settings.channels['iot'], msg_iot21)
+                await self.send_message_to_channel(self.settings.channels['iot'], msg_iot20)          
             
             print("loop done")
-            await asyncio.sleep(60*60)
+            await asyncio.sleep(self.settings.hour)
     
     def get_schedule_for_week(self, week, classname):
         """" Gets class schedule for given week """
