@@ -5,6 +5,7 @@ from discord.ext import tasks
 
 from .selnavigator import SelNavigator
 from .pageparser import PageParser
+from .settings import Settings
 
 
 from datetime import datetime as time
