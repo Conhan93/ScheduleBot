@@ -18,5 +18,5 @@ class Settings:
     def init_channels_settings(self):
 
         self.channels = {}
-        self.channels['iot20'] = os.getenv(int('CHANNEL_IOT20'))
-        self.channels['iot'] = os.getenv(int('CHANNEL_IOT'))
+        self.channels['iot20'] = int(os.getenv('CHANNEL_IOT20'))
+        self.channels['iot'] = int(os.getenv('CHANNEL_IOT'))
