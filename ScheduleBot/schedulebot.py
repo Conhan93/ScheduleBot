@@ -28,7 +28,7 @@ class ScheduleBot(discord.Client):
     async def on_ready(self):
         print('We have logged in as {0.user}'.format(self))
 
-        self.loop.create_task(self.update_schedule_monday())
+        self.loop.create_task(self.post_schedule_loop())
 
     async def on_message(self, message):
         """ triggers on message from discord """
@@ -71,7 +71,7 @@ class ScheduleBot(discord.Client):
         except Exception as error:
             print(repr(error))
         
-    async def update_schedule_monday(self):
+    async def post_schedule_loop(self):
         if not self.is_ready():
             await self.wait_until_ready()
 
