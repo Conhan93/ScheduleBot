@@ -66,7 +66,7 @@ class ScheduleBot(discord.Client):
     async def send_message_to_channel(self, channel_id, msg):
         try:
             if len(msg) > 0:
-                channel = self.get_channel(int(channel_id))
+                channel = self.get_channel(channel_id)
                 await channel.send(msg)
         except Exception as error:
             print(repr(error))
@@ -78,7 +78,7 @@ class ScheduleBot(discord.Client):
         while True:
             print("looping")
             
-            if time.now(pytz.timezone('Europe/Stockholm')).hour == 6 and time.today().weekday() == self.settings.weekday['mon']:
+            if time.now(pytz.timezone('Europe/Stockholm')).hour == 9 and time.today().weekday() == self.settings.weekday['mon']:
                 
                 msg_iot20 = self.get_schedule_for_week(str(time.today().isocalendar()[1]), 'iot20')
                 msg_iot21 = self.get_schedule_for_week(str(time.today().isocalendar()[1]), 'iot21')
