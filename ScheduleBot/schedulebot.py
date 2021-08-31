@@ -14,6 +14,7 @@ class ScheduleBot(discord.Client):
         super().__init__(*args, **kwargs)
 
         self.settings = Settings()
+        self.navigator = SelNavigator(self.settings)
 
         self.classname = None
         self.week = None
@@ -80,7 +81,7 @@ class ScheduleBot(discord.Client):
                 msg_iot20 = self.get_schedule_for_week(week, 'iot20')
                 msg_iot21 = self.get_schedule_for_week(week, 'iot21')
 
-                # post scheduels to schedule channels
+                # post schedules to schedule channels
                 await self.send_message_to_channel(self.settings.channels['iot20'], msg_iot20)
 
                 await self.send_message_to_channel(self.settings.channels['iot'], msg_iot21)
@@ -92,17 +93,15 @@ class ScheduleBot(discord.Client):
     
     def get_schedule_for_week(self, week, classname):
         """" Gets class schedule for given week """
-        navigator = SelNavigator()
         parser = PageParser()
-        page = navigator.get_page_at(week, classname)
+        page = self.navigator.get_page_at(week, classname)
 
         
         return parser.extract_schedule(page)
     def get_schedule_current(self, classname):
         """" Gets class schedule for current week """
-        navigator = SelNavigator()
         parser = PageParser()
-        page = navigator.get_page(classname)
+        page = self.navigator.get_page(classname)
 
         
         return parser.extract_schedule(page)

@@ -7,6 +7,7 @@ class Settings:
 
         self.init_time_settings()
         self.init_channels_settings()
+        self.init_navigator_settings()
 
     def init_time_settings(self):
 
@@ -23,3 +24,7 @@ class Settings:
         
         self.channels['iot20'] = int(os.getenv('CHANNEL_IOT20'))
         self.channels['iot'] = int(os.getenv('CHANNEL_IOT'))
+
+    def init_navigator_settings(self):
+
+        self.url = os.getenv('TIMEEDIT_URL')

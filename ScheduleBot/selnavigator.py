@@ -11,8 +11,10 @@ from selenium.webdriver.support import expected_conditions as EC
 class SelNavigator:
     """ Navigates the TimeEdit page """
 
-    def __init__(self):
-        self.url = os.getenv('TIMEEDIT_URL')
+    def __init__(self, settings):
+
+        self.settings = settings
+        self.url = self.settings.url #os.getenv('TIMEEDIT_URL')
     
     def _enter_classname(self, classname):
          #find search box
@@ -80,7 +82,7 @@ class SelNavigator:
 
         page = self.driver.page_source
 
-        self.driver.close()
+        self.driver.quit()
 
         return page
 
@@ -108,6 +110,6 @@ class SelNavigator:
             count += 1
 
         page = self.driver.page_source
-        self.driver.close()
+        self.driver.quit()
         
         return page
