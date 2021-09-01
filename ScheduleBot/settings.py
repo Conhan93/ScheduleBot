@@ -2,6 +2,7 @@ import os
 
 
 class Settings:
+    """Holds settings, config and constant values"""
 
     def __init__(self):
 
@@ -28,3 +29,7 @@ class Settings:
     def init_navigator_settings(self):
 
         self.url = os.getenv('TIMEEDIT_URL')
+
+        # navigator firefox webdrive settings
+        self.firefox_binary = os.environ.get('FIREFOX_BIN')
+        self.driver_path = os.environ.get('GECKODRIVER_PATH')

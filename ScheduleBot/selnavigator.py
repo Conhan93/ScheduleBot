@@ -14,7 +14,7 @@ class SelNavigator:
     def __init__(self, settings):
 
         self.settings = settings
-        self.url = self.settings.url #os.getenv('TIMEEDIT_URL')
+        self.url = self.settings.url 
     
     def _enter_classname(self, classname):
          #find search box
@@ -57,11 +57,11 @@ class SelNavigator:
         options.add_argument("-disable-gpu")
         options.add_argument("-no-sandbox")
 
-        binary = FirefoxBinary(os.environ.get('FIREFOX_BIN'))
+        binary = FirefoxBinary(self.settings.firefox_binary)
 
         firefox_driver = webdriver.Firefox(
             firefox_binary=binary,
-            executable_path=os.environ.get('GECKODRIVER_PATH'),
+            executable_path=self.settings.driver_path,
             options=options)
 
         return firefox_driver
