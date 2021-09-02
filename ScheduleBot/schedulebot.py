@@ -40,8 +40,10 @@ class ScheduleBot(discord.Client):
             try:
                 self._get_args(message.content)
                 
+                # get schedule for current week
                 if self.classname and not self.week:
-                    response = self.get_schedule_current(self.classname)
+                    response = self.get_schedule_for_week(str(time.get_cur_week()), self.classname)
+                # get schedule for given week
                 elif self.classname and self.week:
                     response = self.get_schedule_for_week(self.week, self.classname)
         
