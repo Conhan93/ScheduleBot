@@ -74,20 +74,20 @@ class ScheduleBot(discord.Client):
 
         while True:
             print("looping")
-            
-            if time.get_cur_hour() == 6 and time.get_cur_weekday() == self.settings.weekday['mon']:
-                
-                week = str(time.get_cur_week())
+            if time.get_cur_week() in self.settings.schoolweeks:
+                if time.get_cur_hour() == 6 and time.get_cur_weekday() == self.settings.weekday['mon']:
+                    
+                    week = str(time.get_cur_week())
 
-                # get schedules
-                msg_iot20 = self.get_schedule_for_week(week, 'iot20')
-                msg_iot21 = self.get_schedule_for_week(week, 'iot21')
+                    # get schedules
+                    msg_iot20 = self.get_schedule_for_week(week, 'iot20')
+                    msg_iot21 = self.get_schedule_for_week(week, 'iot21')
 
-                # post schedules to schedule channels
-                await self.send_message_to_channel(self.settings.channels['iot20'], msg_iot20)
+                    # post schedules to schedule channels
+                    await self.send_message_to_channel(self.settings.channels['iot20'], msg_iot20)
 
-                await self.send_message_to_channel(self.settings.channels['iot'], msg_iot21)
-                await self.send_message_to_channel(self.settings.channels['iot'], msg_iot20)          
+                    await self.send_message_to_channel(self.settings.channels['iot'], msg_iot21)
+                    await self.send_message_to_channel(self.settings.channels['iot'], msg_iot20)          
             
             print("loop done")
             # wait for an hour
