@@ -117,7 +117,7 @@ class ScheduleBot(discord.Client):
         if len(split_input) == 0:
             split_input.append('-h')
 
-        argparser = argparse.ArgumentParser(prog='Schedulebot')
+        argparser = argparse.ArgumentParser(prog='$schema')
         argparser.add_argument('-w','--week',type=int, help='week number')
         argparser.add_argument('-c', '--classname',required=True,help='required! name of the class or group, ex. "iot20')
         
