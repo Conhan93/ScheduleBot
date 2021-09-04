@@ -118,14 +118,14 @@ class ScheduleBot(discord.Client):
             split_input.append('-h')
 
         argparser = argparse.ArgumentParser(prog='$schema')
-        argparser.add_argument('-w','--week',type=int, help='week number')
+        argparser.add_argument('-w','--week', help='week number')
         argparser.add_argument('-c', '--classname',required=True,help='required! name of the class or group, ex. "iot20')
         
         try:
             args = argparser.parse_args(split_input)
 
             self.classname = args.classname
-            self.week = str(args.week)
+            self.week = args.week
         except:
             help_io = io.StringIO()
 
