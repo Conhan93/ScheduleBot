@@ -7,6 +7,9 @@ from .util import time
 
 import asyncio
 
+import argparse
+import shlex
+import io
 
 class ScheduleBot(discord.Client):
    
@@ -33,13 +36,10 @@ class ScheduleBot(discord.Client):
         
         if message.content.startswith('$schema'):
 
-            if 'help' in message.content.lower():
-                await message.channel.send('skriv "$schema klassnamn(ex iot20) vecka(34)" för schema')
-                return
 
             try:
-                self._get_args(message.content)
-                
+                response = self._get_args(message.content)
+
                 # get schedule for current week
                 if self.classname and not self.week:
                     response = self.get_schedule_for_week(str(time.get_cur_week()), self.classname)
@@ -107,18 +107,34 @@ class ScheduleBot(discord.Client):
 
         
         return parser.extract_schedule(page)
-    def _get_args(self, args):
-        argsl = args.split()
+    def _get_args(self, _input):
+        split_input = shlex.split(_input)
 
+        # remove $schema
+        split_input.pop(0)
+
+        # add help arg to display help message if no args provided
+        if len(split_input) == 0:
+            split_input.append('-h')
+
+        argparser = argparse.ArgumentParser(prog='Schedulebot')
+        argparser.add_argument('-w','--week',type=int, help='week number')
+        argparser.add_argument('-c', '--classname',required=True,help='required! name of the class or group, ex. "iot20')
         
-        if len(argsl) < 2 and len(argsl) > 3:
-            raise ValueError('invalid amount of arguments')
-        
-        if len(argsl) == 2:
-            self.classname = argsl[1]
-        else:
-            self.classname = argsl[1]
-            self.week = argsl[2]
+        try:
+            args = argparser.parse_args(split_input)
+
+            self.classname = args.classname
+            self.week = str(args.week)
+        except:
+            help_io = io.StringIO()
+
+            # save help message in help_io
+            argparser.print_help(help_io)
+
+            help_message = help_io.getvalue()
+            help_io.close()
+            return help_message
 
     def _reset_variables(self):
         self.classname = None

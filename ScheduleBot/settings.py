@@ -17,7 +17,8 @@ class Settings:
         self.weekday = {'mon' : 0, 'tue' : 1 , 'wed' : 2,
                         'thu' : 3, 'fri' : 4, 'sat' : 5, 'sun' : 6}
 
-        self.schoolweeks = list(range(34, 53)).extend(list(range(0, 25)))
+        self.schoolweeks = [i for i in range(34, 53)]
+        self.schoolweeks.extend([i for i in range(0,25)])
 
     def init_channels_settings(self):
 
