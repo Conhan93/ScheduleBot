@@ -76,7 +76,7 @@ class ScheduleBot(discord.Client):
             # wait for an hour
             await asyncio.sleep(self.settings.hour)
 
-            if time.get_cur_week() in self.settings.schoolweeks: 
+            if time.get_cur_week() not in self.settings.schoolweeks: 
                 continue
 
             if time.get_cur_hour() == 6 and time.get_cur_weekday() == self.settings.weekday['mon']:
