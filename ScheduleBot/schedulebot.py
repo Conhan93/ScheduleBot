@@ -34,7 +34,7 @@ class ScheduleBot(discord.Client):
         if message.author == self.user:
             return
         
-        if message.content.startswith('$schema'):
+        if message.content.startswith('$schedulebot'):
 
 
             try:
@@ -117,7 +117,7 @@ class ScheduleBot(discord.Client):
         if len(split_input) == 0:
             split_input.append('-h')
 
-        argparser = argparse.ArgumentParser(prog='$schema')
+        argparser = argparse.ArgumentParser(prog='$schedulebot')
         argparser.add_argument('-w','--week', help='week number')
         argparser.add_argument('-c', '--classname',required=True,help='required! name of the class or group, ex. "iot20')
         
