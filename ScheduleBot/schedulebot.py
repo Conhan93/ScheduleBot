@@ -99,9 +99,15 @@ class ScheduleBot(discord.Client):
         parser = PageParser()
         page = self.navigator.get_page_at(week, classname)
         entries = parser.extract_schedule(page)
-        _schedule = Schedule(entries)
 
-        return _schedule.__repr__()
+        try:
+            # construct schedule
+            _schedule = Schedule(entries)
+
+            return _schedule.__repr__()
+        except:
+            # no schedule found
+            return ''
         
     def _get_args(self, _input):
         split_input = shlex.split(_input)
