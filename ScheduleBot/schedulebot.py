@@ -4,6 +4,7 @@ from .selnavigator import SelNavigator
 from .pageparser import PageParser
 from .settings import Settings
 from .util import time
+from .Models import Schedule
 
 import asyncio
 
@@ -97,16 +98,17 @@ class ScheduleBot(discord.Client):
         """" Gets class schedule for given week """
         parser = PageParser()
         page = self.navigator.get_page_at(week, classname)
+        entries = parser.extract_schedule(page)
 
-        
-        return parser.extract_schedule(page)
-    def get_schedule_current(self, classname):
-        """" Gets class schedule for current week """
-        parser = PageParser()
-        page = self.navigator.get_page(classname)
+        try:
+            # construct schedule
+            _schedule = Schedule(entries)
 
+            return _schedule.__repr__()
+        except:
+            # no schedule found
+            return ''
         
-        return parser.extract_schedule(page)
     def _get_args(self, _input):
         split_input = shlex.split(_input)
 
