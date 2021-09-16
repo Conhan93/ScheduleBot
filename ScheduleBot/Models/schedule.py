@@ -1,3 +1,4 @@
+import re
 
 class ScheduleEvent:
 
@@ -18,8 +19,11 @@ class ScheduleEvent:
 class ScheduleDay:
 
     def __init__(self, event):
-        self.day = event[0][:3]
-        self.date = event[0][3:]
+
+        result = re.findall('(.+)([0-9][0-9]\/[0-9][0-9])', event[0])[0]
+
+        self.day = result[0]
+        self.date = result[1]
         self.events = []
 
         self.events.append(ScheduleEvent(event[1:]))
@@ -47,7 +51,6 @@ class Schedule:
 
         for event in events:
             if(list(filter(str.isalpha, event[0][0:2]))):
-                print('day')
                 self.days.append(ScheduleDay(event))
             else:
                 self.days[-1].add_event(event)
