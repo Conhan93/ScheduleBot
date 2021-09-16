@@ -14,7 +14,10 @@ class ScheduleEvent:
             self.note = None
     
     def __repr__(self) -> str:
-        return f'{self.time} {self.lecturer}\n{self.location} {self.coursename}'
+        if self.note:
+            return f'{self.time} {self.lecturer}\n{self.location} {self.coursename}\n{self.note}'
+        else:
+            return f'{self.time} {self.lecturer}\n{self.location} {self.coursename}'
 
 class ScheduleDay:
 
