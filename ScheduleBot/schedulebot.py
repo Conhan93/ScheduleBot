@@ -103,13 +103,6 @@ class ScheduleBot(discord.Client):
 
         return _schedule.__repr__()
         
-    def get_schedule_current(self, classname):
-        """" Gets class schedule for current week """
-        parser = PageParser()
-        page = self.navigator.get_page(classname)
-
-        
-        return parser.extract_schedule(page)
     def _get_args(self, _input):
         split_input = shlex.split(_input)
 
