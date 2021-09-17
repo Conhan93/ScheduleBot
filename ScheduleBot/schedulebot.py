@@ -47,7 +47,7 @@ class ScheduleBot(discord.Client):
                 # get schedule for given week
                 elif self.classname and self.week:
                     response = self.get_schedule_for_week(self.week, self.classname)
-        
+                    
                 if len(response) == 0:
                     await message.channel.send('kunde inte hitta ett schema för den veckan')
                     
@@ -104,7 +104,7 @@ class ScheduleBot(discord.Client):
             # construct schedule
             _schedule = Schedule(entries)
 
-            return _schedule.__repr__()
+            return str(_schedule)
         except:
             # no schedule found
             return ''
