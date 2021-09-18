@@ -104,7 +104,7 @@ class ScheduleBot(discord.Client):
             # construct schedule
             _schedule = Schedule(entries)
 
-            return str(_schedule)
+            return _schedule
         except:
             # no schedule found
             return ''
