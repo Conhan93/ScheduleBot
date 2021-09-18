@@ -30,7 +30,7 @@ class ScheduleDay:
 
     def __init__(self, event):
 
-        result = re.findall('(.+)([0-9][0-9]\/[0-9][0-9])', event[0])[0]
+        result = re.findall('([a-öA-Ö]{3,4})([0-9]{1,2}\/[0-9]{1,2})', event[0])[0]
 
         self.day = result[0]
         self.date = result[1]
@@ -80,3 +80,6 @@ class Schedule:
             rep += str(day)
         
         return rep
+    
+    def __len__(self) -> int:
+        return len(self.days)
