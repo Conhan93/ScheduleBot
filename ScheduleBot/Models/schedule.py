@@ -1,6 +1,10 @@
 import re
 
 class ScheduleEvent:
+    """
+    Class that holds information about an event or
+    a schedule row on TimeEdit.
+    """
 
     def __init__(self, data):
         self.time = data[0]
@@ -13,13 +17,16 @@ class ScheduleEvent:
         else:
             self.note = None
     
-    def __repr__(self) -> str:
+    def __str__(self) -> str:
         if self.note:
             return f'{self.time} {self.lecturer}\n{self.location} {self.coursename}\n{self.note}'
         else:
             return f'{self.time} {self.lecturer}\n{self.location} {self.coursename}'
 
 class ScheduleDay:
+    """
+    Class that contains all the scheduled events of a particular day.
+    """
 
     def __init__(self, event):
 
@@ -34,11 +41,11 @@ class ScheduleDay:
     def add_event(self, data):
         self.events.append(ScheduleEvent(data))
 
-    def __repr__(self) -> str:
+    def __str__(self) -> str:
         rep = f'{self.day} {self.date}\n'
 
         for event in self.events:
-            rep += event.__repr__() + '\n'
+            rep += str(event) + '\n'
 
         return rep + '\n'
     def get_group(self):
@@ -48,22 +55,28 @@ class ScheduleDay:
         return self.events[0].group
 
 class Schedule:
-
+    """
+    Class that holds a schedule, constructs a schedule from
+    a list of schedule entries created by PageParser.
+    """
     def __init__(self, events):
         self.days = []
 
         for event in events:
-            if(list(filter(str.isalpha, event[0][0:2]))):
+            #if event starts with day, create new day from event
+            if str.isalpha(event[0][0:2]):
                 self.days.append(ScheduleDay(event))
+            
+            # else add event to previous day
             else:
                 self.days[-1].add_event(event)
         
         self.group = self.days[0].get_group()
 
-    def __repr__(self) -> str:
+    def __str__(self) -> str:
         rep = f'{self.group}\n\n'
 
         for day in self.days:
-            rep += day.__repr__()
+            rep += str(day)
         
         return rep
