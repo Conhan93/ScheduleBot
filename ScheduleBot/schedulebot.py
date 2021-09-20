@@ -12,6 +12,8 @@ import argparse
 import shlex
 import io
 
+import re
+
 class ScheduleBot(discord.Client):
    
     def __init__(self, *args, **kwargs):
@@ -22,6 +24,7 @@ class ScheduleBot(discord.Client):
 
         self.classname = None
         self.week = None
+        self.date = None
          
 
     async def on_ready(self):
@@ -41,13 +44,17 @@ class ScheduleBot(discord.Client):
             try:
                 response = self._get_args(message.content)
 
-                # get schedule for current week
-                if self.classname and not self.week:
-                    response = self.get_schedule_for_week(str(time.get_cur_week()), self.classname)
-                # get schedule for given week
-                elif self.classname and self.week:
-                    response = self.get_schedule_for_week(self.week, self.classname)
-                    
+                if self.classname:
+                    # get schedule for current week
+                    if not self.week and not self.date:
+                        response = self.get_schedule_for_week(str(time.get_cur_week()), self.classname)
+                    # get schedule for given week
+                    elif self.week and not self.date:
+                        response = self.get_schedule_for_week(self.week, self.classname)
+                    #get schedule for given date
+                    elif self.date and not self.week:
+                        response = self.get_schedule_for_date(self.date, self.classname)
+                
                 if len(response) == 0:
                     await message.channel.send('kunde inte hitta ett schema för den veckan')
                     
@@ -108,7 +115,22 @@ class ScheduleBot(discord.Client):
         except:
             # no schedule found
             return ''
-        
+    
+    def get_schedule_for_date(self, date, classname):
+        """ Gets class schedule for given date"""
+        parser = PageParser()
+        page = self.navigator.get_page_at_date(date, classname)
+        entries = parser.extract_schedule(page)
+
+        try:
+            # construct schedule
+            _schedule = Schedule(entries)
+
+            return _schedule
+        except:
+            # no schedule found
+            return ''
+
     def _get_args(self, _input):
         split_input = shlex.split(_input)
 
@@ -120,15 +142,22 @@ class ScheduleBot(discord.Client):
             split_input.append('-h')
 
         argparser = argparse.ArgumentParser(prog='$schedulebot')
-        argparser.add_argument('-w','--week', help='week number')
         argparser.add_argument('-c', '--classname',required=True,help='required! name of the class or group, ex. "iot20')
+
+        search_group = argparser.add_mutually_exclusive_group()
+        search_group.add_argument('-w','--week',type=self.week_type, help='week number')
+        search_group.add_argument('-d', '--date', type=self.date_type, help="date to search for")
+
         
         try:
             args = argparser.parse_args(split_input)
 
             self.classname = args.classname
             self.week = args.week
+            self.date = args.date
+
         except:
+
             help_io = io.StringIO()
 
             # save help message in help_io
@@ -141,3 +170,20 @@ class ScheduleBot(discord.Client):
     def _reset_variables(self):
         self.classname = None
         self.week = None
+        self.date = None
+
+    def date_type(self, arg_val , pattern = '^([0-9]{1,2}\/[0-9]{1,2})$'):
+        
+        if re.match(pattern, arg_val):
+            return arg_val
+        raise argparse.ArgumentTypeError
+    
+    def week_type(self, arg_val):
+        try:
+            week = int(arg_val)
+            if week < 53 and week >= 0:
+                return arg_val
+        except:
+            raise argparse.ArgumentTypeError
+        
+        raise argparse.ArgumentTypeError
