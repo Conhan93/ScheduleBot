@@ -113,3 +113,28 @@ class SelNavigator:
         self.driver.quit()
         
         return page
+    
+    def get_page_at_date(self, search_date, classname):
+        #setup browser
+        self.driver = self._load_driver()
+
+        #load page
+        self.driver.get(self.url)
+
+        self._enter_classname(classname)
+        if self._select_search_result() == None:
+            return ''
+
+       
+        count = 0
+        while count < 30:
+            
+            dates = [tag.text for tag in self.driver.find_elements(By.XPATH, '//table[@class="restable"]/tbody/tr[@class="rr clickable2"]/td[3]')]
+            
+            if search_date in dates:
+                break
+            
+            self.driver.find_element_by_class_name('btrRight').click()
+            count += 1
+
+        return self.driver.page_source
