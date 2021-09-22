@@ -1,4 +1,3 @@
-import re
 
 class ScheduleEvent:
     """
@@ -30,16 +29,14 @@ class ScheduleDay:
 
     def __init__(self, event):
 
-        result = re.findall('([a-öA-Ö]{3,4})([0-9]{1,2}\/[0-9]{1,2})', event[0])[0]
-
-        self.day = result[0]
-        self.date = result[1]
+        self.day = event[1]
+        self.date = event[2]
         self.events = []
 
-        self.events.append(ScheduleEvent(event[1:]))
+        self.events.append(ScheduleEvent(event[3:]))
     
     def add_event(self, data):
-        self.events.append(ScheduleEvent(data))
+        self.events.append(ScheduleEvent(data[3:]))
 
     def __str__(self) -> str:
         rep = f'{self.day} {self.date}\n'
@@ -64,7 +61,7 @@ class Schedule:
 
         for event in events:
             #if event starts with day, create new day from event
-            if str.isalpha(event[0][0:2]):
+            if event[1]:
                 self.days.append(ScheduleDay(event))
             
             # else add event to previous day
