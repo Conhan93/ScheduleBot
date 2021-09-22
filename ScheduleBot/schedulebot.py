@@ -1,7 +1,6 @@
 import discord
 
 from .selnavigator import SelNavigator
-from .pageparser import PageParser
 from .settings import Settings
 from .util import time
 from .Models import Schedule
@@ -103,9 +102,7 @@ class ScheduleBot(discord.Client):
     
     def get_schedule_for_week(self, week, classname):
         """" Gets class schedule for given week """
-        parser = PageParser()
-        page = self.navigator.get_page_at(week, classname)
-        entries = parser.extract_schedule(page)
+        entries = self.navigator.get_page_at_date(week, classname)
 
         try:
             # construct schedule
@@ -118,9 +115,7 @@ class ScheduleBot(discord.Client):
     
     def get_schedule_for_date(self, date, classname):
         """ Gets class schedule for given date"""
-        parser = PageParser()
-        page = self.navigator.get_page_at_date(date, classname)
-        entries = parser.extract_schedule(page)
+        entries = self.navigator.get_page_at_date(date, classname)
 
         try:
             # construct schedule
