@@ -145,8 +145,8 @@ class ScheduleBot(discord.Client):
         argparser.add_argument('-c', '--classname',required=True,help='required! name of the class or group, ex. "iot20')
 
         search_group = argparser.add_mutually_exclusive_group()
-        search_group.add_argument('-w','--week',type=self.week_type, help='week number')
-        search_group.add_argument('-d', '--date', type=self.date_type, help="date to search for")
+        search_group.add_argument('-w','--week',type=time.week_type, help='week number')
+        search_group.add_argument('-d', '--date', type=time.date_type, help="date to search for")
 
         
         try:
@@ -172,18 +172,4 @@ class ScheduleBot(discord.Client):
         self.week = None
         self.date = None
 
-    def date_type(self, arg_val , pattern = '^([0-9]{1,2}\/[0-9]{1,2})$'):
-        
-        if re.match(pattern, arg_val):
-            return arg_val
-        raise argparse.ArgumentTypeError
     
-    def week_type(self, arg_val):
-        try:
-            week = int(arg_val)
-            if week < 53 and week >= 0:
-                return arg_val
-        except:
-            raise argparse.ArgumentTypeError
-        
-        raise argparse.ArgumentTypeError
