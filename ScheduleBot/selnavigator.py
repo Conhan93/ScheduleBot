@@ -8,6 +8,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 
+from selenium.webdriver.firefox.webelement import FirefoxWebElement
+
 class SelNavigator:
     """ Navigates the TimeEdit page """
 
@@ -46,7 +48,7 @@ class SelNavigator:
         return 1
 
     def _load_driver(self):
-
+        return webdriver.Firefox()
         options = webdriver.FirefoxOptions()
 	
         # enable trace level for debugging 
@@ -80,11 +82,10 @@ class SelNavigator:
         week = self.driver.find_element_by_class_name('flexFixed')
         html = week.get_attribute('innerHTML')
 
-        page = self.driver.page_source
-
+        data = self._get_table_data()
         self.driver.quit()
-
-        return page
+        
+        return data
 
     def get_page_at(self, week_sel, classname):
         """ Gets the schedule page for the given week """
@@ -109,10 +110,10 @@ class SelNavigator:
             html = week.get_attribute('innerHTML')
             count += 1
 
-        page = self.driver.page_source
+        data = self._get_table_data()
         self.driver.quit()
         
-        return page
+        return data
     
     def get_page_at_date(self, search_date, classname):
         #setup browser
@@ -137,4 +138,24 @@ class SelNavigator:
             self.driver.find_element_by_class_name('btrRight').click()
             count += 1
 
-        return self.driver.page_source
+        data = self._get_table_data()
+        self.driver.quit()
+        
+        return data
+    
+
+    def _get_table_data(self):
+
+        data = []
+
+        table = self.driver.find_element(By.XPATH, '//table[@class="restable"]/tbody')
+
+        for row in table.find_elements(By.XPATH, './/tr[@class="rr clickable2"]'):
+            print(row.text)
+            event = []
+            for col in row.find_elements(By.XPATH, './/td'):
+                print(col.text)
+                event.append(col.text)
+            data.append(event)
+ 
+        return data

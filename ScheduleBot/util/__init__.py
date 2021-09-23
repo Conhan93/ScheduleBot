@@ -1,1 +1,1 @@
-from .time import get_cur_hour, get_cur_week, get_cur_weekday
+from .time import get_cur_hour, get_cur_week, get_cur_weekday, week_type, date_type
