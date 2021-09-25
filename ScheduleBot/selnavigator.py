@@ -48,7 +48,6 @@ class SelNavigator:
         return 1
 
     def _load_driver(self):
-        return webdriver.Firefox()
         options = webdriver.FirefoxOptions()
 	
         # enable trace level for debugging 
@@ -138,7 +137,7 @@ class SelNavigator:
             self.driver.find_element_by_class_name('btrRight').click()
             count += 1
 
-        data = self._get_table_data()
+        data = self._get_entries_by_date(search_date)
         self.driver.quit()
         
         return data
@@ -151,11 +150,33 @@ class SelNavigator:
         table = self.driver.find_element(By.XPATH, '//table[@class="restable"]/tbody')
 
         for row in table.find_elements(By.XPATH, './/tr[@class="rr clickable2"]'):
-            print(row.text)
             event = []
             for col in row.find_elements(By.XPATH, './/td'):
-                print(col.text)
                 event.append(col.text)
             data.append(event)
  
         return data
+    
+    def _get_entries_by_date(self, date):
+
+        data = []
+
+        read = False
+
+        table = self.driver.find_element(By.XPATH, '//table[@class="restable"]/tbody')
+
+        for row in table.find_elements(By.XPATH, './/tr[@class="rr clickable2"]'):
+            
+            columns = row.find_elements(By.XPATH, './/td')
+
+            if len(columns[2].text) > 0:
+                read = True if columns[2].text == date else False
+
+            if not read:
+                continue
+            
+            # add row to list
+            data.append([col.text for col in columns])
+ 
+        return data
+            
