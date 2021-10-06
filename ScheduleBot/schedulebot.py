@@ -102,7 +102,7 @@ class ScheduleBot(discord.Client):
     
     def get_schedule_for_week(self, week, classname):
         """" Gets class schedule for given week """
-        entries = self.navigator.get_page_at_date(week, classname)
+        entries = self.navigator.get_page_at(week, classname)
 
         try:
             # construct schedule
