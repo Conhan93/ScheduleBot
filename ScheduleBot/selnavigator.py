@@ -48,6 +48,7 @@ class SelNavigator:
         return 1
 
     def _load_driver(self):
+        return webdriver.Firefox()
         options = webdriver.FirefoxOptions()
 	
         # enable trace level for debugging 

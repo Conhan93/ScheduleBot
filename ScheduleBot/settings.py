@@ -1,4 +1,5 @@
 import os
+from .config import config
 
 
 class Settings:
@@ -24,12 +25,12 @@ class Settings:
 
         self.channels = {}
         
-        self.channels['iot20'] = int(os.getenv('CHANNEL_IOT20'))
-        self.channels['iot'] = int(os.getenv('CHANNEL_IOT'))
+        self.channels['iot20'] = config.iot20Id
+        self.channels['iot'] = config.iotId
 
     def init_navigator_settings(self):
 
-        self.url = os.getenv('TIMEEDIT_URL')
+        self.url = config.url
 
         # navigator firefox webdrive settings
         self.firefox_binary = os.environ.get('FIREFOX_BIN')

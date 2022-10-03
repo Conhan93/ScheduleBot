@@ -1,10 +1,17 @@
-import os
+import discord
 
 from ScheduleBot.schedulebot import ScheduleBot
+from ScheduleBot.config import config
 
 
-scheduleclient = ScheduleBot()
 
-scheduleclient.run(os.getenv('DISCORD_TOKEN'))
+
+intents = discord.Intents.default()
+intents.members = True
+intents.message_content = True
+
+scheduleclient = ScheduleBot(intents=intents)
+
+scheduleclient.run(config.discordToken)
 
 
