@@ -6,6 +6,7 @@ from .util import time
 from .Models import Schedule
 
 import asyncio
+import logging
 
 import argparse
 import shlex
@@ -27,7 +28,8 @@ class ScheduleBot(discord.Client):
          
 
     async def on_ready(self):
-        print('We have logged in as {0.user}'.format(self))
+        logging.info('Logged in as {0.user}'.format(self))
+        
 
         self.loop.create_task(self.post_schedule_loop())
 
@@ -62,7 +64,7 @@ class ScheduleBot(discord.Client):
                 
             # print exception to log
             except Exception as error:
-                print(f'wooops : {repr(error)}')
+                logging.error(f'wooops : {repr(error)}')
             
             self._reset_variables()
 
@@ -73,7 +75,7 @@ class ScheduleBot(discord.Client):
                 channel = self.get_channel(channel_id)
                 await channel.send(msg)
         except Exception as error:
-            print(repr(error))
+            logging.error(repr(error))
         
     async def post_schedule_loop(self):
         if not self.is_ready():
@@ -91,14 +93,14 @@ class ScheduleBot(discord.Client):
                 week = str(time.get_cur_week())
 
                 # get schedules
-                msg_iot20 = self.get_schedule_for_week(week, 'iot20')
                 msg_iot21 = self.get_schedule_for_week(week, 'iot21')
+                msg_iot22 = self.get_schedule_for_week(week, 'iot22')
 
                 # post schedules to schedule channels
-                await self.send_message_to_channel(self.settings.channels['iot20'], msg_iot20)
-
+                await self.send_message_to_channel(self.settings.channels['iot'], msg_iot22)
                 await self.send_message_to_channel(self.settings.channels['iot'], msg_iot21)
-                await self.send_message_to_channel(self.settings.channels['iot'], msg_iot20)          
+
+                logging.info("Updated weekly schedule")          
     
     def get_schedule_for_week(self, week, classname):
         """" Gets class schedule for given week """
